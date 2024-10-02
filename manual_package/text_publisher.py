@@ -17,28 +17,29 @@ class TextPublisher(Node):
 
 
     def listener_callback(self,msg):
-        # OpenCV設定
-        img = np.zeros((720, 1280, 3))
-        text=""   # パブリッシュするテキスト
-        while True:
-            cv2.putText(img, text, (30, 30), cv2.FONT_HERSHEY_DUPLEX,
-                        1.0, (255, 255, 255))
-            cv2.imshow("Text Publisher", img)
+        if msg != None:
+            # OpenCV設定
+            img = np.zeros((720, 1280, 3))
+            text=""   # パブリッシュするテキスト
+            while True:
+                cv2.putText(img, text, (30, 30), cv2.FONT_HERSHEY_DUPLEX,
+                            1.0, (255, 255, 255))
+                cv2.imshow("Text Publisher", img)
 
-            key = cv2.waitKey(10)
-            if key == 13:  # Enterキーが押された場合
-                print("pressed Enter Key")
-                self.publish_text(text)
-                cv2.destroyAllWindows()  # ウィンドウを閉じる
-                break
-            if key == 225:
-                self.upper_flg = not self.upper_flg  # 大文字フラグを反転
-                continue
-            if key != -1:
-                if ord('a') <= key <= ord('z') and self.upper_flg:
-                    text += chr(key).upper()
-                else:
-                    text += chr(key)
+                key = cv2.waitKey(10)
+                if key == 13:  # Enterキーが押された場合
+                    print("pressed Enter Key")
+                    self.publish_text(text)
+                    cv2.destroyAllWindows()  # ウィンドウを閉じる
+                    break
+                if key == 225:
+                    self.upper_flg = not self.upper_flg  # 大文字フラグを反転
+                    continue
+                if key != -1:
+                    if ord('a') <= key <= ord('z') and self.upper_flg:
+                        text += chr(key).upper()
+                    else:
+                        text += chr(key)
 
     def publish_text(self,text):
         msg = String()
